@@ -15,7 +15,7 @@ echo "**********************************************************************"
 echo && echo && echo
 
 
-echo "Would you like to install your beautiful brand new MYCE masternode ? [y/n]"
+echo "Would you like to install the dependencies of your brand new MYCE masternode ? [y/n]"
 read DOSETUP
 
 if [[ $DOSETUP =~ "y" ]] ; then
@@ -66,8 +66,8 @@ echo "server=1" >> $CONF_DIR/$CONF_FILE
 echo "daemon=1" >> $CONF_DIR/$CONF_FILE
 echo "logtimestamps=1" >> $CONF_DIR/$CONF_FILE
 echo "maxconnections=256" >> $CONF_DIR/$CONF_FILE
-echo "masternode=1" >> $CONF_DIR/$CONF_FILE
 echo "" >> $CONF_DIR/$CONF_FILE
+
 
 cd ~/MycelliumMN/src
 ./myced
@@ -90,10 +90,12 @@ read PORT
 #echo "**********************************************************************"
 #echo ""
 #echo "Enter your masternode private key then press [ENTER]:"
-PRIVKEY=./myced masternode genkey
-echo "This is you Private Key (copy and save it somewhere)"
-echo $PRIVKEY
+./myced masternode genkey
+echo "This is you Private Key (copy and paste it here, then press ENTER[])"
+read PRIVKEY
 ./myced stop
+echo "now copy and paste it somewhere safe, then press ENTER[]"
+read 
 
 echo ""
 echo "**********************************************************************"
@@ -112,6 +114,7 @@ echo "" >> $CONF_DIR/$CONF_FILE
 echo "port=$PORT" >> $CONF_DIR/$CONF_FILE
 echo "masternodeaddr=$IP:$PORT" >> $CONF_DIR/$CONF_FILE
 echo "masternodeprivkey=$PRIVKEY" >> $CONF_DIR/$CONF_FILE
+echo "masternode=1" >> $CONF_DIR/$CONF_FILE
 echo "" >> $CONF_DIR/$CONF_FILE
 sudo ufw allow $PORT/tcp
 
