@@ -71,7 +71,8 @@ echo "" >> $CONF_DIR/$CONF_FILE
 
 cd ~/MycelliumMN/src
 ./myced
-
+echo "PRESS ENTER[] to continue"
+read
 
 echo ""
 echo "**********************************************************************"
@@ -118,4 +119,4 @@ echo "masternode=1" >> $CONF_DIR/$CONF_FILE
 echo "" >> $CONF_DIR/$CONF_FILE
 sudo ufw allow $PORT/tcp
 
-./myce -daemon
+./myced -daemon
