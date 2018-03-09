@@ -71,6 +71,8 @@ read PORT
 #echo ""
 #echo "Enter your masternode private key then press [ENTER]:"
 PRIVKEY=./myced genkey
+echo "This is you Private Key (copy and save it somewhere)"
+echo $PRIVKEY
 ./myced stop
 
 echo ""
@@ -100,7 +102,7 @@ echo "" >> $CONF_DIR/$CONF_FILE
 
 echo "" >> $CONF_DIR/$CONF_FILE
 echo "port=$PORT" >> $CONF_DIR/$CONF_FILE
-echo "masternodeaddress=$IP:$PORT" >> $CONF_DIR/$CONF_FILE
+echo "masternodeaddr=$IP:$PORT" >> $CONF_DIR/$CONF_FILE
 echo "masternodeprivkey=$PRIVKEY" >> $CONF_DIR/$CONF_FILE
 sudo ufw allow $PORT/tcp
 
