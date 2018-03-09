@@ -54,40 +54,6 @@ fi
 git clone https://github.com/mycelliumcoin/MycelliumMN
 cd MycelliumMN/src/leveldb && chmod 777 * && cd .. && make -f makefile.unix
 
-cd ~/myce/src
-./myced
-
-
-echo ""
-echo "**********************************************************************"
-echo ""
-echo "Let's configure your masternodes..."
-echo "Type the IP of this server (it's located on your dashboard) then press [ENTER]:"
-read IP
-hostname -I
-echo ""
-echo "**********************************************************************"
-echo ""
-echo "Type the PORT your going to use on this server (port: 23511 recommended for MYCE) then press [ENTER]:"
-read PORT
-
-#echo ""
-#echo "**********************************************************************"
-#echo ""
-#echo "Enter your masternode private key then press [ENTER]:"
-PRIVKEY=./myced genkey
-echo "This is you Private Key (copy and save it somewhere)"
-echo $PRIVKEY
-./myced stop
-
-echo ""
-echo "**********************************************************************"
-echo ""
-echo "                          Thanks I'll continue                        "
-echo ""
-echo "**********************************************************************"
-echo ""
-
 
 CONF_DIR=~/.Myce/
 CONF_FILE=Myce.conf
@@ -103,12 +69,50 @@ echo "maxconnections=256" >> $CONF_DIR/$CONF_FILE
 echo "masternode=1" >> $CONF_DIR/$CONF_FILE
 echo "" >> $CONF_DIR/$CONF_FILE
 
+cd ~/MycelliumMN/src
+./myced
+
+
+echo ""
+echo "**********************************************************************"
+echo ""
+echo "Let's configure your masternodes..."
+echo "Type the IP of this server (it's located on your dashboard) then press [ENTER]:"
+hostname -I
+read IP
+echo ""
+echo "**********************************************************************"
+echo ""
+echo "Type the PORT your going to use on this server (port: 23511 recommended for MYCE) then press [ENTER]:"
+read PORT
+
+#echo ""
+#echo "**********************************************************************"
+#echo ""
+#echo "Enter your masternode private key then press [ENTER]:"
+PRIVKEY=./myced masternode genkey
+echo "This is you Private Key (copy and save it somewhere)"
+echo $PRIVKEY
+./myced stop
+
+echo ""
+echo "**********************************************************************"
+echo ""
+echo "                          Thanks I'll continue                        "
+echo ""
+echo "**********************************************************************"
+echo ""
+
+
+
+
 #echo "addnode=127.0.0.1" >> $CONF_DIR/$CONF_FILE
 
 echo "" >> $CONF_DIR/$CONF_FILE
 echo "port=$PORT" >> $CONF_DIR/$CONF_FILE
 echo "masternodeaddr=$IP:$PORT" >> $CONF_DIR/$CONF_FILE
 echo "masternodeprivkey=$PRIVKEY" >> $CONF_DIR/$CONF_FILE
+echo "" >> $CONF_DIR/$CONF_FILE
 sudo ufw allow $PORT/tcp
 
 ./myce -daemon
