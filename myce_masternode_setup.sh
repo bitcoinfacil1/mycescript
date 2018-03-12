@@ -41,9 +41,12 @@ if [[ $DOSETUP =~ "y" ]] ; then
 
   sudo apt-get install -y ufw
   sudo ufw allow ssh/tcp
+  sudo ufw allow 23511
   sudo ufw logging on
-  #sudo ufw enable
   sudo ufw status
+
+  echo "ENTER Yes"
+  sudo ufw enable
 
   mkdir -p ~/bin
   echo 'export PATH=~/bin:$PATH' > ~/.bash_aliases
@@ -51,9 +54,25 @@ if [[ $DOSETUP =~ "y" ]] ; then
 
 fi
 
-git clone https://github.com/mycelliumcoin/MycelliumMN
-cd MycelliumMN/src/leveldb && chmod 777 * && cd .. && make -f makefile.unix
+#creating a new user
 
+echo "Now we are creating a new user(myce_masternode). Use this password (9asSD18as9d8aIOdas1) or whatever you want."
+echo "Complete the passwords. You can leave blank other fields."
+adduser myce_masternode
+usermod -aG sudo myce_masternode
+
+echo "Now we are entering this new user(myce_masternode). Use the password set to enter."
+sudo su myce_masternode
+cd ~
+
+
+git clone https://github.com/mycelliumcoin/MycelliumMN
+cd ~/MycelliumMN/src/leveldb && chmod 777 * && cd .. && sudo make -f makefile.unix
+
+cd ~
+
+cd ~/MycelliumMN/src
+./myced
 
 CONF_DIR=~/.Myce/
 CONF_FILE=Myce.conf
@@ -80,6 +99,7 @@ echo ""
 echo "Let's configure your masternodes..."
 echo "Type the IP of this server (it's located on your dashboard) then press [ENTER]:"
 hostname -I
+echo "The first IP in the string before is your IP"
 read IP
 echo ""
 echo "**********************************************************************"
@@ -95,7 +115,7 @@ read PORT
 echo "This is you Private Key (copy and paste it here, then press ENTER[])"
 read PRIVKEY
 ./myced stop
-echo "now copy and paste it somewhere safe, then press ENTER[]"
+echo "now copy and paste it somewhere else safe, then press ENTER[]"
 read 
 
 echo ""
@@ -116,7 +136,11 @@ echo "port=$PORT" >> $CONF_DIR/$CONF_FILE
 echo "masternodeaddr=$IP:$PORT" >> $CONF_DIR/$CONF_FILE
 echo "masternodeprivkey=$PRIVKEY" >> $CONF_DIR/$CONF_FILE
 echo "masternode=1" >> $CONF_DIR/$CONF_FILE
+echo "externalip=$PRIVKEY" >> $CONF_DIR/$CONF_FILE
 echo "" >> $CONF_DIR/$CONF_FILE
 sudo ufw allow $PORT/tcp
 
+
 ./myced -daemon
+echo "press ENTER[] to FISISH"
+read 
